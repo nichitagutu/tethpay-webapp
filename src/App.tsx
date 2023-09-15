@@ -1,40 +1,45 @@
-import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
-import { Web3Modal } from '@nichitagutu/web3modal-react'
-import { configureChains, createConfig, WagmiConfig } from 'wagmi'
-import { mainnet, optimism, polygon } from 'wagmi/chains'
-import { useEffect, useState } from 'react'
+import {
+	EthereumClient,
+	w3mConnectors,
+	w3mProvider
+} from '@web3modal/ethereum';
+import { Web3Modal } from '@nichitagutu/web3modal-react';
+import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { mainnet, optimism, polygon } from 'wagmi/chains';
+import { useEffect, useState } from 'react';
+import Header from './components/Header.js';
 
-const projectId = ''
+const projectId = '';
 
 const chains = [mainnet, polygon, optimism];
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
-  autoConnect: true,
-  connectors: w3mConnectors({ chains, projectId }),
-  publicClient,
+	autoConnect: true,
+	connectors: w3mConnectors({ chains, projectId }),
+	publicClient
 });
 
 const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 function App() {
-  const [ready, setReady] = useState(false);
+	const [ready, setReady] = useState(false);
 
-  useEffect(() => {
-    setReady(true);
-  }, []);
+	useEffect(() => {
+		setReady(true);
+	}, []);
 
-  return (
-    <>
-      {ready ? (
-        <WagmiConfig config={wagmiConfig}>
-          <></>
-        </WagmiConfig>
-      ) : null}
+	return (
+		<>
+			{ready ? (
+				<WagmiConfig config={wagmiConfig}>
+					<Header />
+				</WagmiConfig>
+			) : null}
 
-      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
-    </>
-  );
+			<Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+		</>
+	);
 }
 
-export default App
+export default App;
