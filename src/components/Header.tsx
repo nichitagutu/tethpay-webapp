@@ -7,11 +7,11 @@ import { trimNumber } from '../utils/formatting.js';
 import 'react-loading-skeleton/dist/skeleton.css';
 import './Header.css';
 
-const mockAddress = '0xbe0eb53f46cd790cd13851d5eff43d12404d33e8';
+const mockAddress = '0x3C739adDe59fA08E21d8A75884B8E0FB1745705F';
 
 export default function Header() {
 	return (
-        <div className='header'>
+		<div className="header">
 			<Title />
 			<Web3Button />
 			<Balance />
@@ -28,13 +28,14 @@ function Title() {
 }
 
 function Balance() {
-	// const { address } = useAccount();
+	const { address } = useAccount();
+
 	const {
 		data: balanceData,
 		error: balanceError,
 		isLoading: balanceIsLoading
 	} = useBalance({
-		address: mockAddress
+		address: address
 	});
 
 	const {
@@ -58,24 +59,27 @@ function Balance() {
 	}, [balanceData?.formatted, priceData?.ethereum?.usd]);
 
 	const balanceComponent = useMemo(() => {
-		if (balanceIsLoading || priceIsLoading || balanceError || priceError) {
-			return (
-				<div className="header-balance-number">
-					<p className="header-balance-integer">
-						<Skeleton width={280} />
-					</p>
-				</div>
-			);
+		if (
+			balanceIsLoading ||
+			priceIsLoading ||
+			balanceError ||
+			priceError ||
+			!address
+		) {
+			return <></>;
 		}
 
 		return (
-			<div className="header-balance-number">
-				<p className="header-balance-integer">
-					${balanceInUSD[0]}
-					{balanceInUSD[1]?.length > 0 ? '.' : ''}
-				</p>
-				<p className="header-balance-decimal">{balanceInUSD[1]}</p>
-			</div>
+			<>
+				<div className="header-balance-number">
+					<p className="header-balance-integer">
+						${balanceInUSD[0]}
+						{balanceInUSD[1]?.length > 0 ? '.' : ''}
+					</p>
+					<p className="header-balance-decimal">{balanceInUSD[1]}</p>
+				</div>
+				<p className="header-balance-text">Your Balance</p>
+			</>
 		);
 	}, [
 		balanceInUSD,
@@ -85,10 +89,5 @@ function Balance() {
 		priceError
 	]);
 
-	return (
-		<div className='header-balance'>
-			{balanceComponent}
-			<p className="header-balance-text">Your Balance</p>
-		</div>
-	);
+	return <div className="header-balance">{balanceComponent}</div>;
 }
