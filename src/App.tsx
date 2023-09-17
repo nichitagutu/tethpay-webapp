@@ -1,17 +1,19 @@
+import './App.css';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import SendPage from './pages/SendPage.js';
+// import ReceivePage from './pages/ReceivePage.js';
+import MainPage from './pages/MainPage.js';
+import './App.css';
 import {
 	EthereumClient,
 	w3mConnectors,
 	w3mProvider
 } from '@web3modal/ethereum';
-import { Web3Modal } from '@nichitagutu/web3modal-react';
-import { configureChains, createConfig, WagmiConfig } from 'wagmi';
+import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet, optimism, polygon } from 'wagmi/chains';
+import { Web3Modal } from '@nichitagutu/web3modal-react';
 import { useEffect, useState } from 'react';
-
-import Header from './components/Header.js';
-import Body from './components/Body.js';
-
-import './App.css';
+import ReceivePage from './pages/ReveivePage.js';
 
 const projectId = '';
 
@@ -37,10 +39,13 @@ function App() {
 		<>
 			{ready ? (
 				<WagmiConfig config={wagmiConfig}>
-					<div className="app-wrapper">
-						<Header />
-						<Body />
-					</div>
+					<Router>
+						<Routes>
+							<Route path="/receive" element={<ReceivePage />} />
+							<Route path="/send" element={<SendPage />} />
+							<Route path="/" element={<MainPage />} />
+						</Routes>
+					</Router>
 				</WagmiConfig>
 			) : null}
 
