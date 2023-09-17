@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 // @ts-ignore
 import { ReactComponent as SendIcon } from '../assets/send.svg';
 // @ts-ignore
@@ -8,7 +8,13 @@ import { ReactComponent as BuyIcon } from '../assets/buy.svg';
 // @ts-ignore
 import { ReactComponent as SwapIcon } from '../assets/swap.svg';
 import './Body.css';
-import { OperationType, TabType } from '../types.js';
+import {
+	OperationType,
+	TabType,
+	AddressAssetsResponseType,
+	AssetType
+} from '../types.js';
+import { Link } from 'react-router-dom';
 
 export default function Body() {
 	const [activeTab, setActiveTab] = useState('tokens');
@@ -51,12 +57,14 @@ export default function Body() {
 
 	return (
 		<div className="body">
-            <Tabs tabs={tabs} activeTab={activeTab} />
+			<Tabs tabs={tabs} activeTab={activeTab} />
 			<Operations
 				operations={operations}
 				activeOperation={activeOperation}
 			/>
-			<AssetsList />
+			<div className="body-assets">
+				{activeTab === 'tokens' ? <AssetsList /> : "NFT's BRO!"}
+			</div>
 		</div>
 	);
 }
@@ -64,8 +72,8 @@ export default function Body() {
 function Tabs({ tabs, activeTab }: { tabs: TabType[]; activeTab: string }) {
 	return (
 		<div className="body-tabs">
-			{tabs.map(tab => {
-				return <Tab tab={tab} activeTab={activeTab} />;
+			{tabs.map((tab, i) => {
+				return <Tab tab={tab} activeTab={activeTab} key={i} />;
 			})}
 		</div>
 	);
@@ -94,7 +102,14 @@ function Operations({
 	return (
 		<div className="body-operations">
 			{operations.map(operation => {
-				return <OperationButton operation={operation} activeOperation={activeOperation} />;
+				return (
+					<Link to={`/${operation.name}`}>
+						<OperationButton
+							operation={operation}
+							activeOperation={activeOperation}
+						/>
+					</Link>
+				);
 			})}
 		</div>
 	);
@@ -116,7 +131,90 @@ function OperationButton({
 }
 
 function AssetsList() {
-	return <></>;
+	const [assets, setAssets] = useState<JSX.Element[] | null>(null);
+
+	useEffect(() => {
+		// fetch assets
+
+		const addressAssetsResponse: AddressAssetsResponseType = {
+			address: '0x3C739adDe59fA08E21d8A75884B8E0FB1745705F',
+			tokens: [
+				{
+					balance: '450.00',
+					metadata: {
+						decimals: 6,
+						logo: 'https://static.alchemyapi.io/images/assets/3408.png',
+						name: 'USD Coin',
+						symbol: 'USDC'
+					},
+					token: {
+						contractAddress:
+							'0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
+						tokenBalance:
+							'0x000000000000000000000000000000000000000000000000000000001ad27480'
+					}
+				},
+				{
+					balance: '0.00',
+					metadata: {
+						decimals: 18,
+						logo: 'https://static.alchemyapi.io/images/assets/2396.png',
+						name: 'WETH',
+						symbol: 'WETH'
+					},
+					token: {
+						contractAddress:
+							'0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
+						tokenBalance:
+							'0x0000000000000000000000000000000000000000000000000000000000000000'
+					}
+				}
+			]
+		};
+
+		// transform assets
+		const assets: JSX.Element[] = addressAssetsResponse.tokens.map(
+			token => {
+				const asset: AssetType = {
+					balance: token.balance,
+					name: token.metadata.name,
+					symbol: token.metadata.symbol,
+					logo: token.metadata.logo
+				};
+
+				return <Asset asset={asset} />;
+			}
+		);
+
+		setAssets(assets);
+	}, []);
+
+	return <>{assets ? assets : 'No data'}</>;
 }
 
-function Asset() {}
+function Asset({ asset }: { asset: AssetType }) {
+	return (
+		<>
+			<div className="body-assets-asset">
+				<div className="body-assets-asset-info">
+					<div className="body-assets-asset-logo">
+						<img src={asset.logo} alt="logo" />
+					</div>
+					<div className="body-assets-asset-naming">
+						<p className="body-assets-asset-naming-name">
+							{asset.name}
+						</p>
+						<p className="body-assets-asset-naming-symbol">
+							{asset.symbol}
+						</p>
+					</div>
+				</div>
+				<div className="body-assets-asset-balance">
+					<p className="body-assets-asset-balance-amount">
+						{asset.balance}
+					</p>
+				</div>
+			</div>
+		</>
+	);
+}
