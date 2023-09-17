@@ -1,9 +1,5 @@
-import './App.css';
+import { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import SendPage from './pages/SendPage.js';
-// import ReceivePage from './pages/ReceivePage.js';
-import MainPage from './pages/MainPage.js';
-import './App.css';
 import {
 	EthereumClient,
 	w3mConnectors,
@@ -12,8 +8,18 @@ import {
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet, optimism, polygon } from 'wagmi/chains';
 import { Web3Modal } from '@nichitagutu/web3modal-react';
-import { useEffect, useState } from 'react';
+
+import SendPage from './pages/SendPage.js';
+import MainPage from './pages/MainPage.js';
 import ReceivePage from './pages/ReceivePage.js';
+
+import './App.css';
+
+declare global {
+	interface Window {
+		Telegram: any;
+	}
+}
 
 const projectId = '';
 
@@ -49,7 +55,24 @@ function App() {
 				</WagmiConfig>
 			) : null}
 
-			<Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
+			<Web3Modal
+				themeVariables={{
+					'--w3m-accent-color':
+						window.Telegram?.WebApp?.themeParams?.button_color,
+					'--w3m-accent-fill-color':
+						window.Telegram?.WebApp?.themeParams.button_text_color,
+					'--w3m-background-color':
+						window.Telegram?.WebApp?.themeParams?.button_color,
+					'--w3m-color-bg-1':
+						window.Telegram?.WebApp?.themeParams?.bg_color,
+					'--w3m-color-fg-1':
+						window.Telegram?.WebApp?.themeParams?.text_color,
+					'--w3m-color-fg-3':
+						window.Telegram?.WebApp?.themeParams?.hint_color
+				}}
+				projectId={projectId}
+				ethereumClient={ethereumClient}
+			/>
 		</>
 	);
 }

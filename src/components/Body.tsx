@@ -1,12 +1,4 @@
 import { useEffect, useState } from 'react';
-// @ts-ignore
-import { ReactComponent as SendIcon } from '../assets/send.svg';
-// @ts-ignore
-import { ReactComponent as ReceiveIcon } from '../assets/receive.svg';
-// @ts-ignore
-import { ReactComponent as BuyIcon } from '../assets/buy.svg';
-// @ts-ignore
-import { ReactComponent as SwapIcon } from '../assets/swap.svg';
 import './Body.css';
 import {
 	OperationType,
@@ -15,6 +7,10 @@ import {
 	AssetType
 } from '../types.js';
 import { Link } from 'react-router-dom';
+import SvgSend from '../assets/send.js';
+import SvgReceive from '../assets/receive.js';
+import SvgBuy from '../assets/buy.js';
+import SvgSwap from '../assets/swap.js';
 
 export default function Body() {
 	const [activeTab, setActiveTab] = useState('tokens');
@@ -35,22 +31,30 @@ export default function Body() {
 	const operations: OperationType[] = [
 		{
 			name: 'send',
-			icon: SendIcon,
+			icon: SvgSend.bind(null, {
+				fill: window.Telegram?.WebApp?.themeParams?.text_color
+			}),
 			onClick: () => setActiveOperation('send')
 		},
 		{
 			name: 'receive',
-			icon: ReceiveIcon,
+			icon: SvgReceive.bind(null, {
+				fill: window.Telegram?.WebApp?.themeParams?.text_color
+			}),
 			onClick: () => setActiveOperation('receive')
 		},
 		{
 			name: 'buy',
-			icon: BuyIcon,
+			icon: SvgBuy.bind(null, {
+				fill: window.Telegram?.WebApp?.themeParams?.text_color
+			}),
 			onClick: () => setActiveOperation('buy')
 		},
 		{
 			name: 'swap',
-			icon: SwapIcon,
+			icon: SvgSwap.bind(null, {
+				fill: window.Telegram?.WebApp?.themeParams?.text_color
+			}),
 			onClick: () => setActiveOperation('swap')
 		}
 	];

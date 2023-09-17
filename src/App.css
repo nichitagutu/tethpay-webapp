@@ -3,4 +3,9 @@
 * {
 	font-family: 'Chakra Petch', sans-serif;
 	margin: 0;
+	color: var(--tg-theme-text-color);
+}
+
+body {
+	background-color: var(--tg-theme-bg-color);
 }

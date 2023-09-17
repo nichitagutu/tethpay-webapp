@@ -1,6 +1,5 @@
 import { Web3Button } from '@nichitagutu/web3modal-react';
 import { useMemo } from 'react';
-import Skeleton from 'react-loading-skeleton';
 import { useAccount, useBalance } from 'wagmi';
 import usePrice from '../hooks/coinGecko.js';
 import { trimNumber } from '../utils/formatting.js';

@@ -59,7 +59,7 @@ a {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	background-color: #f7f8fc;
+	background-color: var(--tg-theme-secondary-bg-color);
 	border-radius: 5px;
 	padding: 1rem;
 }
@@ -74,12 +74,13 @@ a {
 }
 
 .body-assets-asset-naming-name {
+	color: var(--tg-theme-text-color);
 	font-weight: 600;
 }
 
 .body-assets-asset-naming-symbol {
 	font-size: 0.75rem;
-	color: #696969;
+	color: var(--tg-theme-hint-color);
 	font-weight: 600;
 }
 

@@ -6,7 +6,7 @@ export type TabType = {
 
 export type OperationType = {
 	name: string;
-	icon: JSX.Element;
+	icon: () => JSX.Element;
 	onClick: () => void;
 };
 
