@@ -12,9 +12,12 @@
 	"dependencies": {
 		"@nichitagutu/web3modal-react": "^2.7.4",
 		"@web3modal/ethereum": "^2.7.1",
+		"axios": "^1.5.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
+		"react-loading-skeleton": "^3.3.1",
 		"viem": "^1.10.9",
+		"vite-plugin-svgr": "^3.2.0",
 		"wagmi": "^1.4.1"
 	},
 	"devDependencies": {

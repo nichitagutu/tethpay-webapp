@@ -7,7 +7,11 @@ import { Web3Modal } from '@nichitagutu/web3modal-react';
 import { configureChains, createConfig, WagmiConfig } from 'wagmi';
 import { mainnet, optimism, polygon } from 'wagmi/chains';
 import { useEffect, useState } from 'react';
+
 import Header from './components/Header.js';
+import Body from './components/Body.js';
+
+import './App.css';
 
 const projectId = '';
 
@@ -33,7 +37,10 @@ function App() {
 		<>
 			{ready ? (
 				<WagmiConfig config={wagmiConfig}>
-					<Header />
+					<div className="app-wrapper">
+						<Header />
+						<Body />
+					</div>
 				</WagmiConfig>
 			) : null}
 
