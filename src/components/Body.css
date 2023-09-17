@@ -1,19 +1,20 @@
 .body {
     width: 100%;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1rem;
+    margin-top: 2rem;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
 }
 
 .body-tabs {
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
+
 }
 
 .body-tabs-tab {
@@ -29,12 +30,13 @@
 }
 
 .body-operations {
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-around;
     gap: 1rem;
+    margin-top: 1.5rem;
 }
 
 .body-operations-button {
@@ -45,4 +47,71 @@
     gap: 0.25rem;
 
     font-weight: bold;
+}
+
+.body-assets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.body-assets-asset {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #F7F8FC;
+    border-radius: 5px;
+    padding: 1rem;
+}
+
+.body-assets-asset-info {
+    display: flex;
+}
+
+.body-assets-asset-naming {
+    display: flex;
+    flex-direction: column;
+}
+
+.body-assets-asset-naming-name {
+    font-weight: 600;
+}
+
+.body-assets-asset-naming-symbol {
+    font-size: 0.75rem;
+    color: #696969;
+    font-weight: 600;
+}
+
+.body-assets-asset-balance {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.body-assets-asset-balance-amount {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.body-assets-asset-logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.body-assets-asset-logo img {
+    width: 32px;
+    height: 32px;
+}
+
+.body-assets-asset-naming {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 1rem;
 }

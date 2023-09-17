@@ -4,12 +4,3 @@
     font-family: 'Chakra Petch', sans-serif;
     margin: 0;
 }
-
-.app-wrapper {
-    display: flex;
-    min-height: 100vh;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 1rem;
-}
