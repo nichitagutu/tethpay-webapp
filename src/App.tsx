@@ -13,7 +13,7 @@ import { WagmiConfig, configureChains, createConfig } from 'wagmi';
 import { mainnet, optimism, polygon } from 'wagmi/chains';
 import { Web3Modal } from '@nichitagutu/web3modal-react';
 import { useEffect, useState } from 'react';
-import ReceivePage from './pages/ReveivePage.js';
+import ReceivePage from './pages/ReceivePage.js';
 
 const projectId = '';
 

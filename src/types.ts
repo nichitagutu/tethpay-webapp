@@ -10,7 +10,6 @@ export type OperationType = {
 	onClick: () => void;
 };
 
-
 export type AddressAssetsResponseType = {
 	address: string;
 	tokens: {
@@ -26,11 +25,11 @@ export type AddressAssetsResponseType = {
 			tokenBalance: string;
 		};
 	}[];
-}
+};
 
 export type AssetType = {
 	balance: string;
 	name: string;
 	symbol: string;
 	logo: string;
-}
+};

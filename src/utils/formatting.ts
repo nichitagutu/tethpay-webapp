@@ -1,4 +1,7 @@
-export function trimNumber(targetNumber: number, decimalPlaces: number): number {
+export function trimNumber(
+	targetNumber: number,
+	decimalPlaces: number
+): number {
 	const numberString = targetNumber.toString();
 	const splittedNumber = numberString.split('.');
 	if (splittedNumber.length === 1) {

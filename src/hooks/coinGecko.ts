@@ -31,10 +31,10 @@ const usePrice = (
 				ethereum: {
 					usd: 1000
 				}
-            });
-            
-            setLoading(false);
-            setError(null);
+			});
+
+			setLoading(false);
+			setError(null);
 		};
 
 		fetchData();
