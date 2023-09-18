@@ -1,0 +1,41 @@
+.receive-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    overflow-y: hidden;
+    color: white;
+}
+
+.receive-body-qrcode-wrapper {
+    padding: 1rem;
+    border-radius: 5px;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.receive-body-btns {
+    font-weight: 600;
+    display: flex;
+    justify-content: space-around;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    padding-bottom: 0.2rem;
+    border-radius: 5px;
+    background-color: #000;
+}
+
+.copy-popup {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #000;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
