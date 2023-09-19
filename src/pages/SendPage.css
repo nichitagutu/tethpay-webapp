@@ -1,0 +1,65 @@
+.send {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	gap: 1rem;
+}
+
+.send-details {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	width: 80%;
+}
+
+.send-details-address {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+.send-details-amount {
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+button {
+	font-size: 1rem;
+	padding: 0.25rem 0.75rem;
+	border-radius: 8px;
+	border: none;
+	background-color: var(--tg-theme-button-color);
+	color: var(--tg-theme-button-text-color);
+}
+
+button:focus {
+    outline: none;
+}
+
+input {
+    font-size: 1rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+	width: 100%;
+    background-color: var(--tg-theme-secondary-bg-color);
+    color: var(--tg-theme-text-color);
+}
+
+input:focus {
+    outline: none;
+}
+
+select.send-select {
+	font-size: 1rem;
+	padding: 6px 10px;
+	border-radius: 8px;
+    border: none;
+	background-color: var(--tg-theme-button-color);
+	color: var(--tg-theme-button-text-color);
+}
+
+select.send-select:focus {
+	outline: none;
+}

@@ -10,6 +10,20 @@ function ReceivePage() {
 	const { address, isConnected } = useAccount();
 	const navigate = useNavigate();
 
+	useEffect(() => {
+		window.Telegram?.WebApp?.BackButton.show();
+		window.Telegram?.WebApp?.BackButton.onClick(() => {
+			navigate('/');
+		});
+
+		return () => {
+			window.Telegram?.WebApp?.BackButton.hide();
+			window.Telegram?.WebApp?.BackButton.offClick(() => {
+				navigate('/');
+			});
+		};
+	}, []);
+
 	function handleCopy(content: string) {
 		navigator.clipboard
 			.writeText(content)
@@ -51,7 +65,7 @@ function ReceivePage() {
 	}, [isConnected, navigate]);
 
 	if (!isConnected || !address) {
-		return;
+		return <></>;
 	}
 
 	return (

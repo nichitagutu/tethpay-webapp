@@ -21,11 +21,11 @@ function BeautifulQRCode({ text }: { text: string }) {
 			data: text,
 			image: logo, // URL for center image if you want to include one
 			dotsOptions: {
-				color: '#ffffff', // Black color for dots
+				color: window.Telegram?.WebApp?.themeParams?.text_color,
 				type: 'rounded' // Rounded dots
 			},
 			backgroundOptions: {
-				color: '#000000' // White background
+				color: window.Telegram?.WebApp?.themeParams?.secondary_bg_color
 			}
 		});
 

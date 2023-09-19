@@ -13,6 +13,8 @@ import SendPage from './pages/SendPage.js';
 import MainPage from './pages/MainPage.js';
 import ReceivePage from './pages/ReceivePage.js';
 
+import { AssetType } from './types.js';
+
 import './App.css';
 
 declare global {
@@ -36,6 +38,7 @@ const ethereumClient = new EthereumClient(wagmiConfig, chains);
 
 function App() {
 	const [ready, setReady] = useState(false);
+	const [availableTokens, setAvailableTokens] = useState<AssetType[]>([]);
 
 	useEffect(() => {
 		setReady(true);
@@ -48,8 +51,22 @@ function App() {
 					<Router>
 						<Routes>
 							<Route path="/receive" element={<ReceivePage />} />
-							<Route path="/send" element={<SendPage />} />
-							<Route path="/" element={<MainPage />} />
+							<Route
+								path="/send"
+								element={
+									<SendPage
+										availableTokens={availableTokens}
+									/>
+								}
+							/>
+							<Route
+								path="/"
+								element={
+									<MainPage
+										setAvailableTokens={setAvailableTokens}
+									/>
+								}
+							/>
 						</Routes>
 					</Router>
 				</WagmiConfig>

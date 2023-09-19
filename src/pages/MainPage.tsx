@@ -3,12 +3,12 @@ import Header from '../components/Header.js';
 
 import './MainPage.css';
 
-export default function MainPage() {
+export default function MainPage({ setAvailableTokens }: { setAvailableTokens: Function}) {
 	return (
 		<>
 			<div className="app-wrapper">
 				<Header />
-				<Body />
+				<Body setAvailableTokens={setAvailableTokens} />
 			</div>
 		</>
 	);

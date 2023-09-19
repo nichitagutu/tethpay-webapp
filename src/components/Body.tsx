@@ -7,12 +7,19 @@ import {
 	AssetType
 } from '../types.js';
 import { Link } from 'react-router-dom';
+
+import useAssets from '../hooks/useAssets.js';
+
 import SvgSend from '../assets/send.js';
 import SvgReceive from '../assets/receive.js';
 import SvgBuy from '../assets/buy.js';
 import SvgSwap from '../assets/swap.js';
 
-export default function Body() {
+export default function Body({
+	setAvailableTokens
+}: {
+	setAvailableTokens: Function;
+}) {
 	const [activeTab, setActiveTab] = useState('tokens');
 	const [activeOperation, setActiveOperation] = useState('send');
 	const tabs: TabType[] = [
@@ -67,7 +74,11 @@ export default function Body() {
 				activeOperation={activeOperation}
 			/>
 			<div className="body-assets">
-				{activeTab === 'tokens' ? <AssetsList /> : "NFT's BRO!"}
+				{activeTab === 'tokens' ? (
+					<AssetsList setAvailableTokens={setAvailableTokens} />
+				) : (
+					"NFT's BRO!"
+				)}
 			</div>
 		</div>
 	);
@@ -134,64 +145,31 @@ function OperationButton({
 	);
 }
 
-function AssetsList() {
+function AssetsList({ setAvailableTokens }: { setAvailableTokens: Function }) {
 	const [assets, setAssets] = useState<JSX.Element[] | null>(null);
 
+	const { data: addressAssetsResponse, error: assetsError } = useAssets(
+		'0x3C739adDe59fA08E21d8A75884B8E0FB1745705F'
+	);
+
 	useEffect(() => {
-		// fetch assets
+		if (!addressAssetsResponse || assetsError) return;
 
-		const addressAssetsResponse: AddressAssetsResponseType = {
-			address: '0x3C739adDe59fA08E21d8A75884B8E0FB1745705F',
-			tokens: [
-				{
-					balance: '450.00',
-					metadata: {
-						decimals: 6,
-						logo: 'https://static.alchemyapi.io/images/assets/3408.png',
-						name: 'USD Coin',
-						symbol: 'USDC'
-					},
-					token: {
-						contractAddress:
-							'0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48',
-						tokenBalance:
-							'0x000000000000000000000000000000000000000000000000000000001ad27480'
-					}
-				},
-				{
-					balance: '0.00',
-					metadata: {
-						decimals: 18,
-						logo: 'https://static.alchemyapi.io/images/assets/2396.png',
-						name: 'WETH',
-						symbol: 'WETH'
-					},
-					token: {
-						contractAddress:
-							'0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2',
-						tokenBalance:
-							'0x0000000000000000000000000000000000000000000000000000000000000000'
-					}
-				}
-			]
-		};
+		const assets: AssetType[] = addressAssetsResponse.tokens.map(token => ({
+			balance: token.balance,
+			name: token.metadata.name,
+			symbol: token.metadata.symbol,
+			logo: token.metadata.logo
+		}));
 
-		// transform assets
-		const assets: JSX.Element[] = addressAssetsResponse.tokens.map(
-			token => {
-				const asset: AssetType = {
-					balance: token.balance,
-					name: token.metadata.name,
-					symbol: token.metadata.symbol,
-					logo: token.metadata.logo
-				};
+		setAvailableTokens(assets);
 
-				return <Asset asset={asset} />;
-			}
-		);
+		const assetElements = assets.map(asset => {
+			return <Asset asset={asset} />;
+		});
 
-		setAssets(assets);
-	}, []);
+		setAssets(assetElements);
+	}, [addressAssetsResponse, assetsError]);
 
 	return <>{assets ? assets : 'No data'}</>;
 }
