@@ -7,7 +7,6 @@ export type TabType = {
 export type OperationType = {
 	name: string;
 	icon: () => JSX.Element;
-	onClick: () => void;
 };
 
 export type AddressAssetsResponseType = {
@@ -32,4 +31,6 @@ export type AssetType = {
 	name: string;
 	symbol: string;
 	logo: string;
+	contractAddress: string;
+	decimals: number;
 };

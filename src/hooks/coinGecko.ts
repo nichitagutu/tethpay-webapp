@@ -15,23 +15,18 @@ const usePrice = (
 
 	useEffect(() => {
 		const fetchData = async () => {
-			// try {
-			// 	const response = await axios.get(
-			// 		`https://api.coingecko.com/api/v3/simple/price?ids=${tokens.join(
-			// 			','
-			// 		)}&vs_currencies=${currency}`
-			// 	);
-			// 	setData(response.data);
-			// } catch (error) {
-			// 	setError(error);
-			// } finally {
-			// 	setLoading(false);
-			// }
-			setData({
-				ethereum: {
-					usd: 1000
-				}
-			});
+			try {
+				const response = await axios.get(
+					`https://api.coingecko.com/api/v3/simple/price?ids=ethereum,${tokens?.join(
+						','
+					)}&vs_currencies=${currency}`
+				);
+				setData(response.data);
+			} catch (error) {
+				setError(error);
+			} finally {
+				setLoading(false);
+			}
 
 			setLoading(false);
 			setError(null);

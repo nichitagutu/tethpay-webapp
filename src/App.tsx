@@ -6,7 +6,7 @@ import {
 	w3mProvider
 } from '@web3modal/ethereum';
 import { WagmiConfig, configureChains, createConfig } from 'wagmi';
-import { mainnet, optimism, polygon } from 'wagmi/chains';
+import { mainnet, optimism, arbitrum } from 'wagmi/chains';
 import { Web3Modal } from '@nichitagutu/web3modal-react';
 
 import SendPage from './pages/SendPage.js';
@@ -25,7 +25,7 @@ declare global {
 
 const projectId = '';
 
-const chains = [mainnet, polygon, optimism];
+const chains = [mainnet, arbitrum, optimism];
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })]);
 const wagmiConfig = createConfig({
@@ -63,6 +63,7 @@ function App() {
 								path="/"
 								element={
 									<MainPage
+										availableTokens={availableTokens}
 										setAvailableTokens={setAvailableTokens}
 									/>
 								}

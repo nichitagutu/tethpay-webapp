@@ -48,6 +48,11 @@ a {
 	font-weight: bold;
 }
 
+.disabled {
+	cursor: default;
+	opacity: 0.35;
+}
+
 .body-assets {
 	display: flex;
 	flex-direction: column;

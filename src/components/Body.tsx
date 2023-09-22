@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react';
 import './Body.css';
-import {
-	OperationType,
-	TabType,
-	AddressAssetsResponseType,
-	AssetType
-} from '../types.js';
+import { OperationType, TabType, AssetType } from '../types.js';
 import { Link } from 'react-router-dom';
 
 import useAssets from '../hooks/useAssets.js';
@@ -14,6 +9,8 @@ import SvgSend from '../assets/send.js';
 import SvgReceive from '../assets/receive.js';
 import SvgBuy from '../assets/buy.js';
 import SvgSwap from '../assets/swap.js';
+import { useAccount, useBalance } from 'wagmi';
+import { trimNumber } from '../utils/formatting.js';
 
 export default function Body({
 	setAvailableTokens
@@ -21,7 +18,6 @@ export default function Body({
 	setAvailableTokens: Function;
 }) {
 	const [activeTab, setActiveTab] = useState('tokens');
-	const [activeOperation, setActiveOperation] = useState('send');
 	const tabs: TabType[] = [
 		{
 			title: 'Tokens',
@@ -40,45 +36,38 @@ export default function Body({
 			name: 'send',
 			icon: SvgSend.bind(null, {
 				fill: window.Telegram?.WebApp?.themeParams?.text_color
-			}),
-			onClick: () => setActiveOperation('send')
+			})
 		},
 		{
 			name: 'receive',
 			icon: SvgReceive.bind(null, {
 				fill: window.Telegram?.WebApp?.themeParams?.text_color
-			}),
-			onClick: () => setActiveOperation('receive')
+			})
 		},
 		{
 			name: 'buy',
 			icon: SvgBuy.bind(null, {
 				fill: window.Telegram?.WebApp?.themeParams?.text_color
-			}),
-			onClick: () => setActiveOperation('buy')
+			})
 		},
 		{
 			name: 'swap',
 			icon: SvgSwap.bind(null, {
 				fill: window.Telegram?.WebApp?.themeParams?.text_color
-			}),
-			onClick: () => setActiveOperation('swap')
+			})
 		}
 	];
 
 	return (
 		<div className="body">
-			<Tabs tabs={tabs} activeTab={activeTab} />
-			<Operations
-				operations={operations}
-				activeOperation={activeOperation}
-			/>
+			{/* <Tabs tabs={tabs} activeTab={activeTab} /> */}
+			<Operations operations={operations} />
 			<div className="body-assets">
-				{activeTab === 'tokens' ? (
-					<AssetsList setAvailableTokens={setAvailableTokens} />
-				) : (
+				{/* {activeTab === 'tokens' ? ( */}
+				<AssetsList setAvailableTokens={setAvailableTokens} />
+				{/*  ) : (
 					"NFT's BRO!"
-				)}
+				)} */}
 			</div>
 		</div>
 	);
@@ -107,23 +96,23 @@ function Tab({ tab, activeTab }: { tab: TabType; activeTab: string }) {
 	);
 }
 
-function Operations({
-	operations,
-	activeOperation
-}: {
-	operations: OperationType[];
-	activeOperation: string;
-}) {
+function Operations({ operations }: { operations: OperationType[] }) {
+	const { isConnected } = useAccount();
 	return (
 		<div className="body-operations">
 			{operations.map(operation => {
-				return (
+				return isConnected ? (
 					<Link to={`/${operation.name}`}>
 						<OperationButton
 							operation={operation}
-							activeOperation={activeOperation}
+							isConnected={isConnected}
 						/>
 					</Link>
+				) : (
+					<OperationButton
+						operation={operation}
+						isConnected={isConnected}
+					/>
 				);
 			})}
 		</div>
@@ -132,13 +121,17 @@ function Operations({
 
 function OperationButton({
 	operation,
-	activeOperation
+	isConnected
 }: {
 	operation: OperationType;
-	activeOperation: string;
+	isConnected: boolean;
 }) {
 	return (
-		<div className="body-operations-button">
+		<div
+			className={`body-operations-button ${
+				isConnected ? '' : 'disabled'
+			}`}
+		>
 			<operation.icon />
 			<p>{operation.name}</p>
 		</div>
@@ -147,24 +140,48 @@ function OperationButton({
 
 function AssetsList({ setAvailableTokens }: { setAvailableTokens: Function }) {
 	const [assets, setAssets] = useState<JSX.Element[] | null>(null);
+	const { address } = useAccount();
 
-	const { data: addressAssetsResponse, error: assetsError } = useAssets(
-		'0x3C739adDe59fA08E21d8A75884B8E0FB1745705F'
-	);
+	const { data: addressAssetsResponse, error: assetsError } =
+		useAssets(address);
+
+	const { data: ethBalance } = useBalance({
+		address
+	});
 
 	useEffect(() => {
-		if (!addressAssetsResponse || assetsError) return;
+		const assets: AssetType[] = [];
+		if (ethBalance !== undefined && ethBalance.value > 0n) {
+			assets?.push({
+				balance: trimNumber(ethBalance.formatted, 6).toString(),
+				name: 'Ethereum',
+				symbol: 'ETH',
+				contractAddress: 'native',
+				logo: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+				decimals: 18
+			});
+		}
 
-		const assets: AssetType[] = addressAssetsResponse.tokens.map(token => ({
-			balance: token.balance,
-			name: token.metadata.name,
-			symbol: token.metadata.symbol,
-			logo: token.metadata.logo
-		}));
+		if (addressAssetsResponse !== null) {
+			assets.push(
+				...addressAssetsResponse?.tokens?.map(token => ({
+					balance: trimNumber(token.balance, 6).toString(),
+					name: token.metadata.name,
+					symbol: token.metadata.symbol,
+					logo: token.metadata.logo,
+					contractAddress: token.token.contractAddress,
+					decimals: token.metadata.decimals
+				}))
+			);
+		}
 
-		setAvailableTokens(assets);
+		const positiveBalances = assets.filter(
+			token => Number.parseFloat(token.balance) !== 0
+		);
 
-		const assetElements = assets.map(asset => {
+		setAvailableTokens(positiveBalances);
+
+		const assetElements = positiveBalances.map(asset => {
 			return <Asset asset={asset} />;
 		});
 

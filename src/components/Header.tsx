@@ -5,15 +5,20 @@ import usePrice from '../hooks/coinGecko.js';
 import { trimNumber } from '../utils/formatting.js';
 import 'react-loading-skeleton/dist/skeleton.css';
 import './Header.css';
+import { AssetType } from '../types.js';
 
 const mockAddress = '0x3C739adDe59fA08E21d8A75884B8E0FB1745705F';
 
-export default function Header() {
+export default function Header({
+	availableTokens
+}: {
+	availableTokens: AssetType[];
+}) {
 	return (
 		<div className="header">
 			<Title />
 			<Web3Button />
-			<Balance />
+			<Balance availableTokens={availableTokens} />
 		</div>
 	);
 }
@@ -26,7 +31,7 @@ function Title() {
 	);
 }
 
-function Balance() {
+function Balance({ availableTokens }: { availableTokens: AssetType[] }) {
 	const { address } = useAccount();
 
 	const {
@@ -41,7 +46,7 @@ function Balance() {
 		data: priceData,
 		error: priceError,
 		loading: priceIsLoading
-	} = usePrice(['ethereum']);
+	} = usePrice(availableTokens?.map(token => token.symbol.toLowerCase()));
 
 	const balanceInUSD = useMemo(() => {
 		const ethPrice = priceData?.ethereum?.usd;

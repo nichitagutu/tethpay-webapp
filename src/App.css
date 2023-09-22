@@ -10,6 +10,6 @@ body {
 	background-color: var(--tg-theme-bg-color);
 }
 
-button {
+button, select {
 	all: unset;
 }

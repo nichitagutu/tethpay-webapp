@@ -1,15 +1,16 @@
 export function trimNumber(
-	targetNumber: number,
+	targetNumber: number | string,
 	decimalPlaces: number
 ): number {
-	const numberString = targetNumber.toString();
+	let numberToTrim = Number.parseFloat(targetNumber.toString());
+	const numberString = numberToTrim.toString();
 	const splittedNumber = numberString.split('.');
 	if (splittedNumber.length === 1) {
-		return targetNumber;
+		return numberToTrim;
 	}
 
 	if (splittedNumber[1].length <= decimalPlaces) {
-		return targetNumber;
+		return numberToTrim;
 	}
 
 	const slicedDecimal = splittedNumber[1].slice(0, decimalPlaces);
