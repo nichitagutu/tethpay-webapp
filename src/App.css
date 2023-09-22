@@ -4,12 +4,14 @@
 	font-family: 'Chakra Petch', sans-serif;
 	margin: 0;
 	color: var(--tg-theme-text-color);
+	box-sizing: border-box !important;
 }
 
 body {
 	background-color: var(--tg-theme-bg-color);
 }
 
-button, select {
+button,
+select {
 	all: unset;
 }

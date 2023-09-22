@@ -1,29 +1,22 @@
-.send {
+.send-page {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
 	height: 100%;
 	gap: 1rem;
+	background-color: #18222d;
+	height: 100%;
+	min-height: 100vh
 }
 
 .send-details {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	width: 80%;
 }
 
 .send-details-address {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
 }
 
-.send-details-amount {
-    border-bottom-left-radius: 8px;
-    border-bottom-right-radius: 8px;
-}
 
 button {
 	font-size: 1rem;
@@ -35,31 +28,68 @@ button {
 }
 
 button:focus {
-    outline: none;
+	outline: none;
 }
 
 input {
-    font-size: 1rem;
-    padding: 0.5rem 0.75rem;
-    border: none;
+	font-size: 1rem;
+	border: none;
 	width: 100%;
-    background-color: var(--tg-theme-secondary-bg-color);
-    color: var(--tg-theme-text-color);
+	background-color: var(--tg-theme-secondary-bg-color);
+	/* color: var(--tg-theme-text-color); */
+	color: #afc1d2 !important;
+
 }
 
 input:focus {
-    outline: none;
+	outline: none;
+	caret-color: transparent;
 }
 
-select.send-select {
+select.send-select,
+.send-details-address {
 	font-size: 1rem;
 	padding: 6px 10px;
 	border-radius: 8px;
-    border: none;
-	background-color: var(--tg-theme-button-color);
+	border: none;
+	/* background-color: var(--tg-theme-button-color); */
+	background-color: #131415;
+	color: #afc1d2 !important;
+	width: 100%;
 	color: var(--tg-theme-button-text-color);
 }
 
 select.send-select:focus {
 	outline: none;
+}
+
+.send-select-wrapper {
+	width: 100%;
+}
+
+.send-details-amount-token-name {
+	font-family: 'Red Hat Mono', monospace;
+	font-size: 3.5rem;
+	margin-left: 0.25rem;
+	margin-bottom: 0.1rem;
+	color: #afc1d2;
+}
+
+.send-details-amount {
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-end;
+	margin-top: 1rem;
+}
+
+
+.send-details-amount-input {
+	font-size: 4rem;
+	font-family: 'Red Hat Mono', monospace;
+	padding: 0;
+	box-sizing: content-box;
+	border: none;
+	text-align: center;
+	width: 4rem;
+	color: #fff !important;
 }
