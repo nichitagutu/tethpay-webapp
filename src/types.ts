@@ -11,19 +11,21 @@ export type OperationType = {
 
 export type AddressAssetsResponseType = {
 	address: string;
-	tokens: {
-		balance: string;
-		metadata: {
-			decimals: number;
-			logo: string;
-			name: string;
-			symbol: string;
-		};
-		token: {
-			contractAddress: string;
-			tokenBalance: string;
-		};
-	}[];
+	tokens: TokenType[];
+};
+
+export type TokenType = {
+	balance: string;
+	metadata: {
+		decimals: number;
+		logo: string;
+		name: string;
+		symbol: string;
+	};
+	token: {
+		contractAddress: string;
+		tokenBalance: string;
+	};
 };
 
 export type AssetType = {
@@ -33,4 +35,9 @@ export type AssetType = {
 	logo: string;
 	contractAddress: string;
 	decimals: number;
+};
+
+export type BalanceInfoType = {
+	eth: string | undefined;
+	tokens: TokenType[] | undefined;
 };
