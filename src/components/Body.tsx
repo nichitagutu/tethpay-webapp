@@ -114,7 +114,10 @@ function AssetsList({
 
 	useEffect(() => {
 		const assets: AssetType[] = [];
-		if (balanceInfo.eth !== undefined && BigInt(balanceInfo.eth) > 0n) {
+		if (
+			balanceInfo.eth !== undefined &&
+			Number.parseFloat(balanceInfo.eth) > 0
+		) {
 			assets?.push({
 				balance: trimNumber(balanceInfo.eth, 6).toString(),
 				name: 'Ethereum',

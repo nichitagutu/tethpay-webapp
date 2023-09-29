@@ -21,7 +21,7 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 	);
 	const [pickedToken, setPickedToken] = useState<AssetType | null>(null);
 	const [destinationAddress, setAddress] = useState<string>('');
-	const [amount, setAmount] = useState<string>('');
+	const [amount, setAmount] = useState<string>('0');
 	const { data: chainId } = useChainId();
 
 	const inputAmountRef = useRef<HTMLInputElement>(null);
@@ -34,13 +34,36 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 		}
 	});
 
-	const { config: tokenConfig } = usePrepareContractWrite({
-		address: pickedToken?.contractAddress as `0x${string}` | undefined,
-		abi: erc20ABI,
-		chainId,
-		args: [destinationAddress as `0x${string}`, BigInt(amount) * 10n ** 6n],
-		functionName: 'transfer'
-	});
+	let tokenConfig = null;
+
+	try {
+		const { config } = usePrepareContractWrite({
+			address: pickedToken?.contractAddress as `0x${string}` | undefined,
+			abi: erc20ABI,
+			chainId,
+			args: [
+				destinationAddress as `0x${string}`,
+				BigInt(Number.parseFloat(amount) * 10 ** 6)
+			],
+			functionName: 'transfer'
+		});
+
+		tokenConfig = config;
+	} catch (error) {
+		const { config } = usePrepareContractWrite({
+			address: pickedToken?.contractAddress as `0x${string}` | undefined,
+			abi: erc20ABI,
+			chainId,
+			args: [
+				destinationAddress as `0x${string}`,
+				BigInt(Number.parseFloat(0) * 10 ** 6)
+			],
+			functionName: 'transfer'
+		});
+
+		tokenConfig = config;
+		console.log(error);
+	}
 
 	const { write } = useContractWrite(tokenConfig);
 
@@ -112,7 +135,6 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 	}
 
 	useEffect(() => {
-		console.log(inputAmountRef, 'eojroejr');
 		if (inputAmountRef.current) {
 			const placeholder =
 				inputAmountRef.current.getAttribute('placeholder') || '';
@@ -124,22 +146,9 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 	}, []);
 
 	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const regex = /^[0-9]*\.?[0-9]*$/;
-		if (regex.test(e.target.value) && e.target.value.length < 6) {
+		const regex = /^\d*(\.\d*)?$/;
+		if (regex.test(e.target.value)) {
 			setAmount(e.target.value);
-
-			if (inputAmountRef.current) {
-				const computedStyle = getComputedStyle(inputAmountRef.current);
-				const font = computedStyle.font;
-				const width =
-					getTextWidth(
-						e.target.value || inputAmountRef.current.placeholder,
-						font
-					) + 4;
-				inputAmountRef.current.style.width = `${Math.ceil(width)}px`;
-			}
-		} else {
-			e.preventDefault();
 		}
 	};
 
@@ -178,6 +187,23 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 					</div>
 
 					<div className="send-details-amount">
+						<input
+							required={true}
+							pattern="\d*(\.\d*)?"
+							type={'text'}
+							className="send-details-destination-address"
+							placeholder="Amount"
+							inputMode="decimal"
+							value={amount}
+							onChange={handleAmountChange}
+						/>
+
+						<div className="send-details-amount-picked-token">
+							{pickedTokenName}
+						</div>
+					</div>
+
+					{/* <div className="send-details-amount">
 						<div className="sned-details-amount-input-wrapper">
 							<input
 								ref={inputAmountRef}
@@ -192,7 +218,7 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 						<div className="send-details-amount-token-name">
 							{pickedTokenName}
 						</div>
-					</div>
+					</div> */}
 				</div>
 			) : null}
 		</div>

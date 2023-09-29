@@ -12,10 +12,13 @@
 	flex-direction: column;
 }
 
-.send-details-address {
+.send-details-address,
+.send-details-amount {
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 }
+
+
 
 
 button {
@@ -46,8 +49,13 @@ input:focus {
 	caret-color: transparent;
 }
 
+.send-details-amount-picked-token {
+	color: #757575;
+}
+
 select.send-select,
-.send-details-address {
+.send-details-address,
+.send-details-amount {
 	font-size: 1rem;
 	padding: 6px 10px;
 	border-radius: 8px;
