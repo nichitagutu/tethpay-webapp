@@ -24,7 +24,7 @@ const useAssets = (
 		const fetchData = async () => {
 			try {
 				const response = await axios.get(
-					`https://qpwe.me/balances?address=${address}&chainId=${chainId}`
+					`https://tethpay.qpwe.me/balances?address=${address}&chainId=${chainId}`
 				);
 
 				console.log(response);
