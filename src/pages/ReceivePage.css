@@ -4,7 +4,7 @@
     align-items: center;
     height: 80vh;
     overflow-y: hidden;
-    color: white;
+    color: var(--tg-theme-text-color);
 }
 
 .receive-body-qrcode-wrapper {

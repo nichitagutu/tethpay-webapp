@@ -23,7 +23,7 @@ declare global {
 	}
 }
 
-const projectId = '';
+const projectId = '55b423b221b5f9f37b5de4fc3a5a2eb8';
 
 const chains = [mainnet, arbitrum, optimism];
 

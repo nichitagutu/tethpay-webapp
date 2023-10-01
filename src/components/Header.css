@@ -22,7 +22,7 @@ h1 {
 .header-balance-text {
 	font-size: 0.75rem;
 	text-align: center;
-	color: #5f5f5f;
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%)); 
 }
 
 .header-balance-number {

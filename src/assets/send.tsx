@@ -8,7 +8,7 @@ function SvgSend({ fill }: { fill?: string }) {
 			viewBox="0 0 25 20"
 		>
 			<path
-				stroke={fill || '#000'}
+				stroke={window.Telegram.WebApp.themeParams.text_color || '#000'}
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				strokeWidth={3}

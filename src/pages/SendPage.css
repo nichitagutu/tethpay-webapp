@@ -2,9 +2,9 @@
 	display: flex;
 	height: 100%;
 	gap: 1rem;
-	background-color: #18222d;
+	background-color: var(--tg-theme-bg-color);
 	height: 100%;
-	min-height: 100vh
+	min-height: 100vh;
 }
 
 .send-details {
@@ -17,9 +17,6 @@
 	border-top-left-radius: 8px;
 	border-top-right-radius: 8px;
 }
-
-
-
 
 button {
 	font-size: 1rem;
@@ -39,9 +36,7 @@ input {
 	border: none;
 	width: 100%;
 	background-color: var(--tg-theme-secondary-bg-color);
-	/* color: var(--tg-theme-text-color); */
-	color: #afc1d2 !important;
-
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%));
 }
 
 input:focus {
@@ -50,7 +45,7 @@ input:focus {
 }
 
 .send-details-amount-picked-token {
-	color: #757575;
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%));
 }
 
 select.send-select,
@@ -60,11 +55,9 @@ select.send-select,
 	padding: 6px 10px;
 	border-radius: 8px;
 	border: none;
-	/* background-color: var(--tg-theme-button-color); */
-	background-color: #131415;
-	color: #afc1d2 !important;
+	background-color: var(--tg-theme-secondary-bg-color);
 	width: 100%;
-	color: var(--tg-theme-button-text-color);
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%));
 }
 
 select.send-select:focus {
@@ -80,7 +73,7 @@ select.send-select:focus {
 	font-size: 3.5rem;
 	margin-left: 0.25rem;
 	margin-bottom: 0.1rem;
-	color: #afc1d2;
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%));
 }
 
 .send-details-amount {
@@ -90,7 +83,6 @@ select.send-select:focus {
 	margin-top: 1rem;
 }
 
-
 .send-details-amount-input {
 	font-size: 4rem;
 	font-family: 'Red Hat Mono', monospace;
@@ -99,5 +91,5 @@ select.send-select:focus {
 	border: none;
 	text-align: center;
 	width: 4rem;
-	color: #fff !important;
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%));
 }

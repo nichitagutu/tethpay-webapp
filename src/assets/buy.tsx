@@ -8,7 +8,7 @@ function SvgBuy({ fill }: { fill?: string }) {
 			viewBox="0 0 25 23"
 		>
 			<path
-				stroke={fill || '#000'}
+				stroke={window.Telegram.WebApp.themeParams.text_color || '#000'}
 				strokeLinecap="round"
 				strokeLinejoin="round"
 				strokeWidth={2.309}
@@ -16,7 +16,7 @@ function SvgBuy({ fill }: { fill?: string }) {
 				clipRule="evenodd"
 			/>
 			<path
-				fill={fill || '#000'}
+				fill={window.Telegram.WebApp.themeParams.text_color || '#000'}
 				d="M23.21 9.705a1.155 1.155 0 0 0 0-2.31v2.31ZM1.978 7.395a1.155 1.155 0 0 0 0 2.31v-2.31Zm11.942 7.129a1.155 1.155 0 0 0 0-2.31v2.31Zm-11.942-2.31a1.155 1.155 0 0 0 0 2.31v-2.31Zm17.25 2.31a1.155 1.155 0 0 0 0-2.31v2.31Zm-1.327-2.31a1.155 1.155 0 0 0 0 2.31v-2.31Zm5.307-4.818H1.98v2.309h21.23v-2.31Zm-9.288 4.818H1.979v2.31H13.92v-2.31Zm5.308 0h-1.327v2.31h1.327v-2.31Z"
 			/>
 		</svg>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { OperationType, AssetType, BalanceInfoType } from '../types.js';
+import { AssetType, BalanceInfoType } from '../types.js';
 import { Link } from 'react-router-dom';
 
 import useAssets from '../hooks/useAssets.js';
@@ -21,8 +21,6 @@ export default function Body({
 	const { data: addressAssetsResponse, error: assetsError } =
 		useAssets(address);
 
-	console.log(addressAssetsResponse);
-
 	const { data: ethBalance } = useBalance({
 		address
 	});
@@ -33,8 +31,7 @@ export default function Body({
 	};
 
 	const hasBalance =
-		ethBalance !== undefined &&
-		ethBalance.value > 0n &&
+		(ethBalance !== undefined && ethBalance.value > 0n) ||
 		balanceInfo.tokens?.length > 0;
 
 	return (
@@ -148,7 +145,7 @@ function AssetsList({
 		setAvailableTokens(positiveBalances);
 
 		const assetElements = positiveBalances.map(asset => {
-			return <Asset asset={asset} />;
+			return <Asset key={asset.symbol} asset={asset} />;
 		});
 
 		setAssets(assetElements);

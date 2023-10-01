@@ -59,7 +59,7 @@ function Balance({ availableTokens }: { availableTokens: AssetType[] }) {
 				.split('.');
 		}
 
-		return [];
+		return [0, 0];
 	}, [balanceData?.formatted, priceData?.ethereum?.usd]);
 
 	const balanceComponent = useMemo(() => {

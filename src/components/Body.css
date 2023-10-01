@@ -5,7 +5,7 @@
 
 a {
 	text-decoration: none;
-	color: #000;
+	color: var(--tg-theme-text-color);
 }
 
 .body-tabs {
@@ -19,12 +19,12 @@ a {
 .body-tabs-tab {
 	font-size: 1.3rem;
 	font-weight: bold;
-	color: #5f5f5f;
+	color: hsl(from var(--tg-theme-text-color) h s calc(l - 10%)); 
 	padding: 0 1rem;
 }
 
 .active {
-	color: #000;
+	color: var(--tg-theme-text-color);
 	border-bottom: #5f5f5f solid 2px;
 }
 

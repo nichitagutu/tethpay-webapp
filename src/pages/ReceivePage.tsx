@@ -28,7 +28,6 @@ function ReceivePage() {
 		navigator.clipboard
 			.writeText(content)
 			.then(() => {
-				console.log('Text copied to clipboard');
 				setCopied(true);
 
 				setTimeout(() => {

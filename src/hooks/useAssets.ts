@@ -26,11 +26,8 @@ const useAssets = (
 				const response = await axios.get(
 					`https://tethpay.qpwe.me/balances?address=${address}&chainId=${chainId}`
 				);
-
-				console.log(response);
 				setData(response.data);
 			} catch (error) {
-				console.log(error);
 				setError(error);
 			} finally {
 				setLoading(false);

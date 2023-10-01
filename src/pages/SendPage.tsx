@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parseEther } from 'viem';
 import {
@@ -26,50 +26,43 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 
 	const inputAmountRef = useRef<HTMLInputElement>(null);
 
-	const { config: ethConfig } = usePrepareSendTransaction({
+	const numberAmount = amount === '' ? 0 : Number.parseFloat(amount);
+	const { config: ethConfig, error: ethError } = usePrepareSendTransaction({
 		to: destinationAddress,
-		value: parseEther(amount),
-		onError: (error: Error) => {
-			console.log(error);
-		}
+		value: parseEther(amount ? amount : '0')
 	});
 
 	let tokenConfig = null;
 
-	try {
-		const { config } = usePrepareContractWrite({
-			address: pickedToken?.contractAddress as `0x${string}` | undefined,
-			abi: erc20ABI,
-			chainId,
-			args: [
-				destinationAddress as `0x${string}`,
-				BigInt(Number.parseFloat(amount) * 10 ** 6)
-			],
-			functionName: 'transfer'
-		});
+	const { config, error: tokenError } = usePrepareContractWrite({
+		address: pickedToken?.contractAddress as `0x${string}` | undefined,
+		abi: erc20ABI,
+		chainId,
+		args: [
+			destinationAddress as `0x${string}`,
+			BigInt(numberAmount * 10 ** 6)
+		],
+		functionName: 'transfer'
+	});
 
-		tokenConfig = config;
-	} catch (error) {
-		const { config } = usePrepareContractWrite({
-			address: pickedToken?.contractAddress as `0x${string}` | undefined,
-			abi: erc20ABI,
-			chainId,
-			args: [
-				destinationAddress as `0x${string}`,
-				BigInt(Number.parseFloat(0) * 10 ** 6)
-			],
-			functionName: 'transfer'
-		});
-
-		tokenConfig = config;
-		console.log(error);
-	}
+	tokenConfig = config;
 
 	const { write } = useContractWrite(tokenConfig);
 
 	const { sendTransaction } = useSendTransaction(ethConfig);
 
+	const pickedEth = pickedTokenName.toLowerCase() === 'eth';
+
 	useEffect(() => {
+		if (inputAmountRef.current) {
+			const placeholder =
+				inputAmountRef.current.getAttribute('placeholder') || '';
+			const computedStyle = getComputedStyle(inputAmountRef.current);
+			const font = computedStyle.font;
+			const width = getTextWidth(placeholder, font);
+			inputAmountRef.current.style.width = `${Math.ceil(width) + 4}px`;
+		}
+
 		window.Telegram?.WebApp?.MainButton.setText('Send');
 		window.Telegram?.WebApp?.MainButton.disable();
 
@@ -80,6 +73,7 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 
 		return () => {
 			window.Telegram?.WebApp?.MainButton.hide();
+			window.Telegram?.WebApp?.MainButton.disable();
 			window.Telegram?.WebApp?.BackButton.hide();
 			window.Telegram?.WebApp?.BackButton.offClick(() => {
 				navigate('/');
@@ -102,25 +96,43 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 		);
 	}, [pickedTokenName]);
 
+	const handleSendTransaction = useCallback(async () => {
+		if (pickedEth) {
+			await sendTransaction?.();
+		} else {
+			await write?.();
+		}
+	}, [write, sendTransaction]);
+
+	const handleAlert = useCallback(() => {
+		alert('Please double check address and amount');
+	}, []);
+
 	useEffect(() => {
-		console.log(destinationAddress, amount);
-		if (destinationAddress !== '' && amount !== '') {
+		if (
+			(pickedEth && ethError !== null) ||
+			(!pickedEth && tokenError !== null)
+		) {
+			window.Telegram?.WebApp?.MainButton.onClick(handleAlert);
+		} else {
+			window.Telegram?.WebApp?.MainButton.onClick(handleSendTransaction);
+		}
+
+		return () => {
+			window.Telegram?.WebApp?.MainButton.offClick(handleSendTransaction);
+			window.Telegram?.WebApp?.MainButton.offClick(handleAlert);
+		};
+	}, [ethError, tokenError, handleSendTransaction]);
+
+	useEffect(() => {
+		if (amount !== '' && destinationAddress !== '') {
 			window.Telegram?.WebApp?.MainButton.show();
 			window.Telegram?.WebApp?.MainButton.enable();
-			console.log(pickedTokenName);
-			if (pickedTokenName.toLowerCase() === 'eth') {
-				window.Telegram?.WebApp?.MainButton.onClick(() => {
-					sendTransaction?.();
-				});
-			} else {
-				window.Telegram?.WebApp?.MainButton.onClick(() => {
-					write?.();
-				});
-			}
 		} else {
 			window.Telegram?.WebApp?.MainButton.hide();
+			window.Telegram?.WebApp?.MainButton.disable();
 		}
-	}, [destinationAddress, amount]);
+	}, [amount, destinationAddress]);
 
 	function getTextWidth(text: string, font: string) {
 		const canvas = document.createElement('canvas');
@@ -133,17 +145,6 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 		}
 		return 0;
 	}
-
-	useEffect(() => {
-		if (inputAmountRef.current) {
-			const placeholder =
-				inputAmountRef.current.getAttribute('placeholder') || '';
-			const computedStyle = getComputedStyle(inputAmountRef.current);
-			const font = computedStyle.font;
-			const width = getTextWidth(placeholder, font);
-			inputAmountRef.current.style.width = `${Math.ceil(width) + 4}px`;
-		}
-	}, []);
 
 	const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const regex = /^\d*(\.\d*)?$/;
@@ -202,23 +203,6 @@ function SendPage({ availableTokens }: { availableTokens: AssetType[] }) {
 							{pickedTokenName}
 						</div>
 					</div>
-
-					{/* <div className="send-details-amount">
-						<div className="sned-details-amount-input-wrapper">
-							<input
-								ref={inputAmountRef}
-								required={true}
-								type={'text'}
-								className="send-details-amount-input"
-								placeholder={`0`}
-								onChange={handleAmountChange}
-								value={amount}
-							/>
-						</div>
-						<div className="send-details-amount-token-name">
-							{pickedTokenName}
-						</div>
-					</div> */}
 				</div>
 			) : null}
 		</div>
